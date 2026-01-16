@@ -17,15 +17,15 @@ export default function Header() {
           <div className="flex items-center justify-between h-16">
             {/* Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
-              <a href="#" className="text-sm font-medium text-black hover:text-gray-700 transition">
+              <Link href="/catalogue?category=men" className="text-sm font-medium text-black hover:text-gray-700 transition">
                 Men
-              </a>
-              <a href="#" className="text-sm font-medium text-black hover:text-gray-700 transition">
+              </Link>
+              <Link href="/catalogue?category=women" className="text-sm font-medium text-black hover:text-gray-700 transition">
                 Women
-              </a>
-              <a href="#" className="text-sm font-medium text-black hover:text-gray-700 transition">
+              </Link>
+              <Link href="/catalogue?category=kids" className="text-sm font-medium text-black hover:text-gray-700 transition">
                 Kids
-              </a>
+              </Link>
               <a href="#" className="text-sm font-medium text-black hover:text-gray-700 transition">
                 New & Featured
               </a>
