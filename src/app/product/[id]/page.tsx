@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import { ShoppingCart, Heart, Share2, Truck, RefreshCw, Shield } from "lucide-react";
+import productsData from "@/data/products.json";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -15,130 +16,32 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
 
-  // Mock products data (same as catalogue)
-  const allProducts = [
-    {
-      id: "loro-piana-polo",
-      image: "https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?q=80&w=800",
-      title: "Loro Piana Polo",
-      description: "Polo with chest zip and Lyocell linen",
-      price: "45",
-      category: "men",
-      fullDescription: "Premium polo shirt crafted from a luxurious blend of Lyocell and linen. Features a distinctive chest zip detail and refined finishing. Perfect for both casual and semi-formal occasions.",
-      images: [
-        "https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?q=80&w=800",
-        "https://images.unsplash.com/photo-1581803118522-7b72a50f7e9f?q=80&w=800",
-        "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?q=80&w=800",
-      ],
-      sizes: ["S", "M", "L", "XL", "XXL"],
-      colors: ["Black", "White", "Navy", "Grey"],
-    },
-    {
-      id: "white-pants",
-      image: "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?q=80&w=800",
-      title: "White Pants",
-      description: "Premium pants",
-      price: "90",
-      category: "men",
-      fullDescription: "Elegant white pants made from premium cotton blend. Features a tailored fit with classic styling. Perfect for summer occasions and sophisticated casual wear.",
-      images: [
-        "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?q=80&w=800",
-        "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?q=80&w=800",
-      ],
-      sizes: ["28", "30", "32", "34", "36", "38"],
-      colors: ["White", "Cream", "Light Grey"],
-    },
-    {
-      id: "bisha-glasses",
-      image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?q=80&w=800",
-      title: "Bisha Glasses",
-      description: "Acetate sunglasses with shiny finishing",
-      price: "50",
-      category: "men",
-      fullDescription: "Modern acetate sunglasses with high-quality lenses and shiny finishing. UV400 protection for your eyes. Contemporary design suitable for all face shapes.",
-      images: [
-        "https://images.unsplash.com/photo-1511499767150-a48a237f0083?q=80&w=800",
-        "https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=800",
-      ],
-      sizes: ["One Size"],
-      colors: ["Black", "Tortoise", "Clear"],
-    },
-    {
-      id: "brown-bomber",
-      image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=800",
-      title: "Brown Bomber",
-      description: "Reversible satin bomber jacket",
-      price: "52",
-      category: "men",
-      fullDescription: "Versatile reversible bomber jacket in luxurious satin. Features two distinct looks in one piece. Perfect for transitional weather with a contemporary edge.",
-      images: [
-        "https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=800",
-        "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800",
-      ],
-      sizes: ["S", "M", "L", "XL"],
-      colors: ["Brown", "Black", "Olive"],
-    },
-    {
-      id: "leather-shoes-jack",
-      image: "https://images.unsplash.com/photo-1613814098518-5834d1d823e5?q=80&w=800",
-      title: "Leather Shoes Jack",
-      description: "Nubuck ankle boots",
-      price: "89",
-      category: "men",
-      fullDescription: "Premium nubuck leather ankle boots with cushioned insole. Durable rubber sole for all-day comfort. Classic design that pairs well with any outfit.",
-      images: [
-        "https://images.unsplash.com/photo-1613814098518-5834d1d823e5?q=80&w=800",
-        "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?q=80&w=800",
-      ],
-      sizes: ["39", "40", "41", "42", "43", "44", "45"],
-      colors: ["Brown", "Black", "Tan"],
-    },
-    {
-      id: "grey-tshirt",
-      image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800",
-      title: "Grey Tshirt",
-      description: "Lyocell crew t-shirt",
-      price: "21",
-      category: "men",
-      fullDescription: "Comfortable crew neck t-shirt made from sustainable Lyocell fabric. Soft, breathable, and perfect for everyday wear. Classic fit with reinforced seams.",
-      images: [
-        "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800",
-        "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=800",
-      ],
-      sizes: ["S", "M", "L", "XL", "XXL"],
-      colors: ["Grey", "Black", "White", "Navy"],
-    },
-    {
-      id: "elegant-dress",
-      image: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?q=80&w=800",
-      title: "Elegant Dress",
-      description: "Black evening dress",
-      price: "120",
-      category: "women",
-      fullDescription: "Sophisticated evening dress in elegant black. Features a flattering silhouette with premium fabric. Perfect for special occasions and formal events.",
-      images: [
-        "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?q=80&w=800",
-        "https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=800",
-      ],
-      sizes: ["XS", "S", "M", "L", "XL"],
-      colors: ["Black", "Navy", "Burgundy"],
-    },
-    {
-      id: "summer-blouse",
-      image: "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=800",
-      title: "Summer Blouse",
-      description: "Light cotton blouse",
-      price: "35",
-      category: "women",
-      fullDescription: "Lightweight cotton blouse perfect for warm weather. Breathable fabric with a relaxed fit. Easy to style for both casual and professional settings.",
-      images: [
-        "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=800",
-        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=800",
-      ],
-      sizes: ["XS", "S", "M", "L", "XL"],
-      colors: ["White", "Blue", "Pink", "Yellow"],
-    },
-  ];
+  // Load products from JSON
+  const allProducts = useMemo(() => {
+    const products = [
+      ...productsData.men,
+      ...productsData.women,
+      ...productsData.kids,
+    ];
+
+    return products.map((product) => ({
+      id: product.id,
+      image: product.image,
+      title: product.name,
+      description: product.description,
+      price: product.price.toFixed(2),
+      category: product.category,
+      subcategory: product.subcategory,
+      sizes: product.sizes,
+      colors: product.colors,
+      material: product.material,
+      brand: product.brand,
+      inStock: product.inStock,
+      rating: product.rating,
+      reviews: product.reviews,
+      images: [product.image, product.image, product.image], // Using same image 3 times for gallery
+    }));
+  }, []);
 
   const productId = params?.id as string;
   const product = allProducts.find((p) => p.id === productId);
@@ -230,10 +133,24 @@ export default function ProductDetailPage() {
           {/* Product Info */}
           <div>
             <h1 className="text-4xl font-bold mb-4 text-black">{product.title}</h1>
+            <div className="mb-4">
+              <p className="text-sm text-gray-600">{product.brand} • {product.subcategory}</p>
+              <div className="flex items-center gap-2 mt-2">
+                <div className="flex items-center">
+                  <span className="text-yellow-500">★</span>
+                  <span className="ml-1 text-sm text-black">{product.rating}</span>
+                </div>
+                <span className="text-sm text-gray-600">({product.reviews} reviews)</span>
+              </div>
+            </div>
             <p className="text-3xl font-bold mb-6 text-black">${product.price}</p>
 
             <div className="border-t border-b py-6 mb-6">
-              <p className="text-black leading-relaxed">{product.fullDescription}</p>
+              <p className="text-black leading-relaxed mb-4">{product.description}</p>
+              <div className="text-sm text-gray-600">
+                <p><strong className="text-black">Material:</strong> {product.material}</p>
+                <p className="mt-1"><strong className="text-black">Stock:</strong> {product.inStock ? "In Stock" : "Out of Stock"}</p>
+              </div>
             </div>
 
             {/* Color Selection */}
