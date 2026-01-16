@@ -1,0 +1,25 @@
+---
+- hosts: webserver
+  become: yes
+  tasks:
+    - name: Cloner le projet
+      git:
+        repo: 'https://github.com/TahirouM/projet-ci-cd.git'
+        dest: /home/azureuser/projet-ci-cd
+        version: main
+        force: yes
+
+    - name: Installer les dépendances
+      command: npm install
+      args:
+        chdir: /home/azureuser/projet-ci-cd
+
+    - name: Générer le build
+      command: npm run build
+      args:
+        chdir: /home/azureuser/projet-ci-cd
+
+    - name: Lancer Next.js en mode production
+      shell: nohup npm start &
+      args:
+        chdir: /home/azureuser/projet-ci-cd
