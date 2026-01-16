@@ -101,14 +101,17 @@ export default function Home() {
             <CategoryCard
               image="https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?q=80&w=800"
               title="MAN"
+              href="/catalogue?category=men"
             />
             <CategoryCard
               image="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=800"
               title="WOMAN"
+              href="/catalogue?category=women"
             />
             <CategoryCard
               image="https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?q=80&w=800"
               title="KIDS"
+              href="/catalogue?category=kids"
             />
           </div>
         </div>
