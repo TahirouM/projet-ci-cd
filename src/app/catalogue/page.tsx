@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import { Search, SlidersHorizontal } from "lucide-react";
+import productsData from "@/data/products.json";
 
-export default function CataloguePage() {
+function CatalogueContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams?.get("category") || "all";
 
@@ -22,135 +23,30 @@ export default function CataloguePage() {
     setSelectedCategory(categoryParam);
   }, [categoryParam]);
 
-  // Mock products data
-  const allProducts = [
-    {
-      image: "https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?q=80&w=800",
-      title: "Loro Piana Polo",
-      description: "Polo with chest zip and Lyocell linen",
-      price: "45",
-      category: "men",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?q=80&w=800",
-      title: "White Pants",
-      description: "Premium pants",
-      price: "90",
-      category: "men",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?q=80&w=800",
-      title: "Bisha Glasses",
-      description: "Acetate sunglasses with shiny finishing",
-      price: "50",
-      category: "men",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=800",
-      title: "Brown Bomber",
-      description: "Reversible satin bomber jacket",
-      price: "52",
-      category: "men",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1613814098518-5834d1d823e5?q=80&w=800",
-      title: "Leather Shoes Jack",
-      description: "Nubuck ankle boots",
-      price: "89",
-      category: "men",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800",
-      title: "Grey Tshirt",
-      description: "Lyocell crew t-shirt",
-      price: "21",
-      category: "men",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?q=80&w=800",
-      title: "Elegant Dress",
-      description: "Black evening dress",
-      price: "120",
-      category: "women",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=800",
-      title: "Summer Blouse",
-      description: "Light cotton blouse",
-      price: "35",
-      category: "women",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=800",
-      title: "Denim Jacket",
-      description: "Classic denim jacket",
-      price: "75",
-      category: "women",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1596783074918-c84cb06531ca?q=80&w=800",
-      title: "Leather Bag",
-      description: "Premium leather handbag",
-      price: "150",
-      category: "women",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1596830394077-6edbef637019?q=80&w=800",
-      title: "High Heels",
-      description: "Elegant high heel shoes",
-      price: "95",
-      category: "women",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800",
-      title: "Silk Scarf",
-      description: "Luxury silk scarf",
-      price: "40",
-      category: "women",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?q=80&w=800",
-      title: "Kids Sneakers",
-      description: "Comfortable sports shoes",
-      price: "45",
-      category: "kids",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?q=80&w=800",
-      title: "Kids T-Shirt",
-      description: "Cotton t-shirt with print",
-      price: "18",
-      category: "kids",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?q=80&w=800",
-      title: "Kids Jacket",
-      description: "Warm winter jacket",
-      price: "55",
-      category: "kids",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1514090458221-65bb69cf63e7?q=80&w=800",
-      title: "Kids Dress",
-      description: "Summer dress with flowers",
-      price: "32",
-      category: "kids",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1555529211-5d483e6a1d1b?q=80&w=800",
-      title: "Kids Jeans",
-      description: "Comfortable denim jeans",
-      price: "28",
-      category: "kids",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1596643905863-e0051ece0894?q=80&w=800",
-      title: "Kids Backpack",
-      description: "School backpack",
-      price: "35",
-      category: "kids",
-    },
-  ];
+  // Load products from JSON file and transform to match ProductCard interface
+  const allProducts = useMemo(() => {
+    const products = [
+      ...productsData.men,
+      ...productsData.women,
+      ...productsData.kids,
+    ];
+
+    return products.map((product) => ({
+      id: product.id,
+      image: product.image,
+      title: product.name,
+      description: product.description,
+      price: product.price.toFixed(2),
+      category: product.category,
+      sizes: product.sizes,
+      colors: product.colors,
+      material: product.material,
+      brand: product.brand,
+      inStock: product.inStock,
+      rating: product.rating,
+      reviews: product.reviews,
+    }));
+  }, []);
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
@@ -332,8 +228,8 @@ export default function CataloguePage() {
 
             {filteredProducts.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredProducts.map((product, index) => (
-                  <ProductCard key={index} {...product} />
+                {filteredProducts.map((product) => (
+                  <ProductCard key={product.id} {...product} />
                 ))}
               </div>
             ) : (
@@ -357,5 +253,13 @@ export default function CataloguePage() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function CataloguePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center"><div className="text-black">Loading...</div></div>}>
+      <CatalogueContent />
+    </Suspense>
   );
 }
