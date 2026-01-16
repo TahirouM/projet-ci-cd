@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
@@ -57,7 +58,7 @@ export default function ProductDetailPage() {
         <Header />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
           <h1 className="text-4xl font-bold mb-4 text-black">Product Not Found</h1>
-          <p className="text-black mb-8">The product you're looking for doesn't exist.</p>
+          <p className="text-black mb-8">The product you&apos;re looking for doesn&apos;t exist.</p>
           <button
             onClick={() => router.push("/catalogue")}
             className="bg-black text-white px-8 py-3 rounded-lg hover:bg-gray-800 transition"
@@ -109,10 +110,11 @@ export default function ProductDetailPage() {
           {/* Image Gallery */}
           <div>
             <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden mb-4">
-              <img
+              <Image
                 src={product.images[selectedImage]}
                 alt={product.title}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
               />
             </div>
             <div className="grid grid-cols-4 gap-4">
@@ -124,7 +126,7 @@ export default function ProductDetailPage() {
                     selectedImage === index ? "ring-2 ring-black" : ""
                   }`}
                 >
-                  <img src={img} alt={`${product.title} ${index + 1}`} className="w-full h-full object-cover" />
+                  <Image src={img} alt={`${product.title} ${index + 1}`} fill className="object-cover" />
                 </button>
               ))}
             </div>

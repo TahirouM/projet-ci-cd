@@ -84,7 +84,7 @@ export default function Home() {
             <div className="relative h-full flex flex-col items-center justify-center text-center text-white px-4">
               <h2 className="text-4xl md:text-5xl font-bold mb-4">WEAR TO WEDDING</h2>
               <p className="text-lg mb-8 max-w-2xl">
-                If you're going to an outside holiday this day or any other, consider this wedding day.
+                If you&apos;re going to an outside holiday this day or any other, consider this wedding day.
               </p>
               <button className="bg-white text-black px-8 py-3 rounded-full font-medium hover:bg-gray-100 transition">
                 See Details

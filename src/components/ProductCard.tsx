@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 interface ProductCardProps {
   image: string;
@@ -14,10 +15,11 @@ export default function ProductCard({ image, title, description, price, id }: Pr
   return (
     <Link href={`/product/${productId}`} className="group cursor-pointer block">
       <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden mb-4">
-        <img
+        <Image
           src={image}
           alt={title}
-          className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+          fill
+          className="object-cover group-hover:scale-105 transition duration-500"
         />
       </div>
       <h3 className="font-semibold text-lg mb-1 text-black">{title}</h3>
