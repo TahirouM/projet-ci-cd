@@ -37,7 +37,7 @@ export default function Header() {
             {/* Logo */}
             <div className="flex-1 flex justify-center md:justify-start md:absolute md:left-1/2 md:-translate-x-1/2">
               <Link href="/" className="text-2xl text-black font-bold tracking-[0.3em]">
-                TOLUS
+                E COMMERCE 2000
               </Link>
             </div>
 
